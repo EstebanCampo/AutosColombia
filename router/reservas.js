@@ -6,6 +6,8 @@ const Conductor = require('../models/Conductores');
 const Vehiculo = require('../models/Vehiculos');
 //contador numero de factura
 let factura = 1;
+//contador cupodisponible
+let cupodisponible = 40;
 
 //Método para crear una nueva reserva
 router.post('/', async function (req, res) {
@@ -21,6 +23,7 @@ router.post('/', async function (req, res) {
         //Se setean los valores que vienen en el body de reserva
         let reserva = new Reservas();
         reserva.factura = factura;
+        reserva.cupodispo = cupodisponible-1;
         reserva.conductor = req.body.conductor;
         reserva.vehiculo = req.body.vehiculo;
         reserva.valorXminuto = req.body.valorXminuto;
@@ -32,6 +35,7 @@ router.post('/', async function (req, res) {
 
         res.send('Reserva registrada correctamente');
         factura = factura + 1;
+        cupodisponible = cupodisponible - 1;
 
     } catch (error) {
         console.log(error);
@@ -70,6 +74,7 @@ router.put('/:reservaId', async function (req, res) {
 
         //Se setean los valores que vienen en el body
         reserva.factura = reserva.factura;
+        reserva.cupodispo = cupodisponible+1;
         reserva.conductor = req.body.conductor;
         reserva.vehiculo = req.body.vehiculo;
         reserva.valorXminuto = req.body.valorXminuto;
@@ -101,6 +106,7 @@ router.put('/:reservaId', async function (req, res) {
 
         //Se guardan los valores en la base de datos
         reserva = await reserva.save();
+        cupodisponible = cupodisponible + 1;
 
         res.send('Reserva actualizada correctamente');
 

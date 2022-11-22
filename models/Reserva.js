@@ -16,6 +16,10 @@ const ReservaSchema = Schema({
     tiempoTotal:{
         type: Number,
     },
+    cupodispo:{
+        type: Number,
+        require: true,
+    },
     fechaIngreso:{
         type: Date,
         required: true,
