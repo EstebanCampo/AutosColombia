@@ -1,5 +1,6 @@
 //Se importa el servidor web con sus rutas y los modelos correspondientes
 const { Router } = require('express');
+const  { jwtValidate } = require("../middlewares/jwt-validator");
 const router = Router();
 const Reservas = require('../models/Reserva');
 const Conductor = require('../models/Conductores');
@@ -10,7 +11,7 @@ let factura = 1;
 let cupodisponible = 40;
 
 //Método para crear una nueva reserva
-router.post('/', async function (req, res) {
+router.post('/', [jwtValidate], async function (req, res) {
 
 
     try {
@@ -46,7 +47,7 @@ router.post('/', async function (req, res) {
 });
 
 //Método para listar reservas
-router.get('/', async function (req, res) {
+router.get('/', [jwtValidate], async function (req, res) {
     //Se utiliza un bloque try catch para manejo o control de excepciones
     try {
         //Se buscan todas las reservas
@@ -61,7 +62,7 @@ router.get('/', async function (req, res) {
 });
 
 //Método para actualizar/finalizar una reserva
-router.put('/:reservaId', async function (req, res) {
+router.put('/:reservaId', [jwtValidate], async function (req, res) {
 
     //Se usa un try catch para manejo de errores o excepciones
     try {

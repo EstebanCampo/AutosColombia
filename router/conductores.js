@@ -1,10 +1,11 @@
 //Se importa el servidor web con sus rutas y el modelo correspondiente
 const { Router } = require('express');
+const  { jwtValidate } = require("../middlewares/jwt-validator");
 const Conductor = require('../models/Conductores');
 const router = Router();
 
 //Método para crear conductor
-router.post('/', async function (req, res) {
+router.post('/', [jwtValidate], async function (req, res) {
     //Se utiliza un bloque try catch para manejo o control de excepciones
     try {
         //conductor 
@@ -39,7 +40,7 @@ router.post('/', async function (req, res) {
     });
 
 //Método para obtener o listar conductores
-router.get('/', async function (req, res) {
+router.get('/', [jwtValidate], async function (req, res){
     //Se usa un try catch para manejo de errores o excepciones
     try {
         //Se buscan todos los conductores
@@ -54,7 +55,7 @@ router.get('/', async function (req, res) {
 });
 
 //Método para actualizar un conductor
-router.put('/:conductorId', async function (req, res) {
+router.put('/:conductorId',[jwtValidate], async function (req, res) {
 
     //Se usa un try catch para manejo de errores o excepciones
     try {

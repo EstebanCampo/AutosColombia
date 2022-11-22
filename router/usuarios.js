@@ -1,5 +1,6 @@
 //Se importa el servidor web con sus rutas y el modelo correspondiente
 const { Router } = require('express');
+const  { jwtValidate } = require("../middlewares/jwt-validator");
 const Usuario = require('../models/Usuarios');
 const router = Router();
 
@@ -34,7 +35,7 @@ router.post('/', async function (req, res) {
     });
 
 //Método para obtener o listar usuarios
-router.get('/', async function (req, res) {
+router.get('/', [jwtValidate], async function (req, res) {
     //Se usa un try catch para manejo de errores o excepciones
     try {
         //Se buscan todos los usuarios
@@ -49,7 +50,7 @@ router.get('/', async function (req, res) {
 });
 
 //Método para actualizar un usuario
-router.put('/:usuarioId', async function (req, res) {
+router.put('/:usuarioId', [jwtValidate], async function (req, res) {
 
     //Se usa un try catch para manejo de errores o excepciones
     try {

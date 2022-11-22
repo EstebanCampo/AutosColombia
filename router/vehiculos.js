@@ -1,10 +1,11 @@
 //Se importa el servidor web con sus rutas y el modelo correspondiente
 const { Router } = require('express');
+const  { jwtValidate } = require("../middlewares/jwt-validator");
 const Vehiculo = require('../models/Vehiculos');
 const router = Router();
 
 //Método para crear vehiculo
-router.post('/', async function (req, res) {
+router.post('/', [jwtValidate], async function (req, res) {
     //Se utiliza un bloque try catch para manejo o control de excepciones
     try {
         //Se valida que el vehciulo no exista
@@ -36,7 +37,7 @@ router.post('/', async function (req, res) {
 
 
 //Método para obtener o listar vehiculos
-router.get('/', async function (req, res) {
+router.get('/', [jwtValidate], async function (req, res) {
     //Se usa un try catch para manejo de errores o excepciones
     try {
         //Se buscan todos los vehiculos
@@ -51,7 +52,7 @@ router.get('/', async function (req, res) {
 });
 
 //Método para actualizar un vehiculo
-router.put('/:vehiculoId', async function (req, res) {
+router.put('/:vehiculoId', [jwtValidate], async function (req, res) {
 
     //Se usa un try catch para manejo de errores o excepciones
     try {
