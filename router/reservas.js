@@ -79,6 +79,7 @@ router.put('/:reservaId', [jwtValidate], async function (req, res) {
         reserva.conductor = req.body.conductor;
         reserva.vehiculo = req.body.vehiculo;
         reserva.valorXminuto = req.body.valorXminuto;
+        reserva.pago = req.body.pago;
         reserva.fechaIngreso = reserva.fechaIngreso;
         reserva.fechaSalida = new Date();
 
@@ -97,19 +98,36 @@ router.put('/:reservaId', [jwtValidate], async function (req, res) {
         dif = ((dif/1000)/60)
 
         //guardando tiempo total en minutos
-        reserva.tiempoTotal = dif;
+        reserva.tiempoTotal = Math.round(dif);
+
+        console.log(dif);
+        console.log(reserva.tiempoTotal);
 
         //calculando valor a pagar
-        let total = (dif * reserva.valorXminuto);
+        let total = (reserva.tiempoTotal * reserva.valorXminuto);
 
         reserva.valorPagar = total;
 
+        console.log(reserva.valorPagar);
+
+        //calculando cambio
+        let cambio = (reserva.pago - reserva.valorPagar);
+        console.log(cambio);
+        //validando pago suficiente
+        if (cambio < 0) {
+            //se multiplica por -1para indicar cuanto falta por pagar
+            cambio = cambio * -1
+            return res.status(400).send('Error, pago insuficiente, faltan ' + cambio + ' ya que el total son: ' + total  );
+            
+        }
+        reserva.cambio = cambio;
+
+        res.send('Reserva finalizada con exito, el cambio a devolver es: ' + cambio);
+        //res.send('Reserva finaliza correctamente');
 
         //Se guardan los valores en la base de datos
         reserva = await reserva.save();
         cupodisponible = cupodisponible + 1;
-
-        res.send('Reserva actualizada correctamente');
 
     } catch (error) {
         console.log(error);

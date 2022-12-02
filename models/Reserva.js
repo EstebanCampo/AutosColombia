@@ -13,6 +13,12 @@ const ReservaSchema = Schema({
     valorPagar:{
         type: Number,
     },
+    pago:{
+        type: Number,
+    },
+    cambio:{
+        type: Number,
+    },
     tiempoTotal:{
         type: Number,
     },
